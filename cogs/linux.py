@@ -37,8 +37,17 @@ class Linux(commands.Cog):
         days, seconds = delta.days, delta.seconds
         hours = seconds // 3600
         minutes = (seconds % 3600) // 60
-        await interaction.response.send_message(
-            f"Uptime: {days} days, {hours} hours, {minutes} minutes")
+
+        # Creating the embed
+        embed = discord.Embed(
+            title="⏱️ Bot Uptime",
+            description=f"**Uptime:**\n{days} days, {hours} hours, {minutes} minutes",
+            color=discord.Color.green()
+        )
+        embed.set_thumbnail(url="https://media.discordapp.net/attachments/1213837998366396508/1275599997424898159/Tux1.png?ex=66c72352&is=66c5d1d2&hm=a62b7e526c922c85ded7e08a57186d5b41a971b5a611f9b244c7c7632a25bb11&=&format=webp&quality=lossless&width=523&height=523")  # Add a relevant thumbnail URL
+        embed.set_footer(text="Keep it running! 🚀")
+
+        await interaction.response.send_message(embed=embed)
 
     @app_commands.command(name="fortune")
     async def fortune(self, interaction: discord.Interaction):
@@ -134,7 +143,9 @@ class Linux(commands.Cog):
         embed.add_field(name="Commands",
                         value="\n".join(commands),
                         inline=False)
+        embed.set_footer(text="TuxBot - The Linux-themed Discord bot", icon_url="https://media.discordapp.net/attachments/1213837998366396508/1275599997424898159/Tux1.png?ex=66c67a92&is=66c52912&hm=992330999afdb3e9c48108fdfdfaad4b696c6042cc3bf807d3ddc3e95cd44de8&=&format=webp&quality=lossless&width=502&height=502")
         await interaction.response.send_message(embed=embed)
+
 
     # Additional Commands
     @app_commands.command(name="ls")
@@ -211,6 +222,23 @@ class Linux(commands.Cog):
         ```
         """
         await interaction.response.send_message(kill_output)
+
+    @app_commands.command(name="card")
+    async def card(self, interaction: discord.Interaction):
+        """Send a cool Linux-themed card with kernel info as an embed."""
+
+        # Create an embed
+        embed = discord.Embed(
+            title="Linux Kernel Card",
+            color=discord.Color.blue()
+        )
+        embed.set_image(url="https://media.discordapp.net/attachments/1275615408933834844/1275955481633886371/svgviewer-png-output.png?ex=66c7c5a4&is=66c67424&hm=6cd16cddbdbedc825e8762ad164f201130ef0d3203554ebea049732c2b1c5f38&=&format=webp&quality=lossless&width=392&height=523")
+        embed.set_footer(text="TuxBot - The Linux-themed Discord bot", icon_url="https://media.discordapp.net/attachments/1213837998366396508/1275599997424898159/Tux1.png?ex=66c67a92&is=66c52912&hm=992330999afdb3e9c48108fdfdfaad4b696c6042cc3bf807d3ddc3e95cd44de8&=&format=webp&quality=lossless&width=502&height=502")
+        # Send the embed
+        await interaction.response.send_message(embed=embed)
+
+
+
 
 async def setup(bot):
     await bot.add_cog(Linux(bot))
