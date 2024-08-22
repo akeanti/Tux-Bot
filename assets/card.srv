@@ -1,0 +1,31 @@
+<svg width="600" height="800" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Background of the card -->
+    <rect x="10" y="10" width="580" height="780" fill="#f0f0f0" stroke="#000" stroke-width="5"/>
+
+    <!-- Title -->
+    <text x="50%" y="50" text-anchor="middle" font-size="40" font-family="Arial" fill="#000">Linux Card</text>
+
+    <!-- Static Logo Centered on the Card -->
+    <image x="50%" y="100" width="200" height="200" xlink:href="https://media.discordapp.net/attachments/1213837998366396508/1275599997424898159/Tux1.png?ex=66c72352&is=66c5d1d2&hm=a62b7e526c922c85ded7e08a57186d5b41a971b5a611f9b244c7c7632a25bb11&=&format=webp&quality=lossless&width=523&height=523"
+           transform="translate(-100, 0)"/>
+
+    <!-- Card Details -->
+    <text x="50%" y="350" text-anchor="middle" font-size="30" font-family="Arial" fill="#000">Linux OS: Discord Linux</text>
+    <text x="50%" y="400" text-anchor="middle" font-size="25" font-family="Arial" fill="#000">Kernel: 5.11.0-38-generic</text>
+    <text x="50%" y="450" text-anchor="middle" font-size="25" font-family="Arial" fill="#000">Uptime: 5 hours, 32 mins</text>
+
+    <!-- Footer -->
+    <text x="50%" y="750" text-anchor="middle" font-size="20" font-family="Arial" fill="#000">Powered by TuxBot</text>
+
+    <!-- Additional Effects -->
+    <!-- Pulsing effect on the card background -->
+    <rect x="10" y="10" width="580" height="780" fill="none" stroke="#000" stroke-width="5">
+        <animate attributeName="stroke-width" values="5;10;5" dur="3s" repeatCount="indefinite"/>
+    </rect>
+    
+    <!-- Glowing effect on the title -->
+    <text x="50%" y="50" text-anchor="middle" font-size="40" font-family="Arial" fill="#000">
+        Linux Card
+        <animate attributeName="fill" values="#000;#ff0000;#000" dur="2s" repeatCount="indefinite"/>
+    </text>
+</svg>
