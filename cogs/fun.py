@@ -30,17 +30,17 @@ class Fun(commands.Cog):
         embed.add_field(
             name="Invite the Bot",
             value=
-            "[Click here to invite the bot](YOUR_BOT_INVITE_LINK)",  # Replace with your bot invite link
+            "[Click here to invite the bot](https://discord.com/oauth2/authorize?client_id=1275464978207604856)",  # Replace with your bot invite link
             inline=False)
         embed.add_field(
             name="Support Server",
             value=
-            "[Join our support server](YOUR_SUPPORT_SERVER_LINK)",  # Replace with your support server link
+            "[Join our support server](https://discord.gg/A2rQsnQMvy)",  # Replace with your support server link
             inline=False)
         embed.add_field(
             name="Our Webpage",
             value=
-            "[Visit our webpage](YOUR_WEBPAGE_LINK)",  # Replace with your webpage link
+            "[Visit our webpage](https://tux-discord-bot.github.io/)",  # Replace with your webpage link
             inline=False)
 
         await interaction.response.send_message(embed=embed)
@@ -55,9 +55,9 @@ class Fun(commands.Cog):
         embed.add_field(
             name="Repository",
             value=
-            "[Click here to view the repo](YOUR_GITHUB_REPO_LINK)",  # Replace with your GitHub repo link
+            "[Click here to view the repo](https://github.com/akeanti/Tux-Bot)",  # Replace with your GitHub repo link
             inline=False)
-
+        embed.set_footer(text="TuxBot - The Linux-themed Discord bot", icon_url="https://media.discordapp.net/attachments/1213837998366396508/1275599997424898159/Tux1.png?ex=66c67a92&is=66c52912&hm=992330999afdb3e9c48108fdfdfaad4b696c6042cc3bf807d3ddc3e95cd44de8&=&format=webp&quality=lossless&width=502&height=502")
         await interaction.response.send_message(embed=embed)
 
     @app_commands.command(name="see_logo")
@@ -78,9 +78,10 @@ class Fun(commands.Cog):
         """Fetches a random meme."""
         # You can use an API or a predefined list for memes. This is a placeholder.
         memes = [
-            "https://i.imgur.com/4Wn16h7.jpg",
-            "https://i.imgur.com/4pLeA0t.jpg",
-            "https://i.imgur.com/Fkj1XFR.jpg"
+            "https://www.meyerperin.com/images/arch-fly.webp",
+            "https://www.meyerperin.com/images/arch-merits.jpg",
+            "https://www.linux.org/attachments/an-update-is-available-for-your-computer-linux-windows-mac_o_93777-jpg.8998/",
+            "https://miro.medium.com/v2/resize:fit:1280/format:webp/0*sbY2fUKYGlcCD31C.jpeg"
         ]
         meme_url = random.choice(memes)
         embed = discord.Embed(title="Here's a meme for you!",
