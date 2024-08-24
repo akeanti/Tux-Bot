@@ -1,4 +1,3 @@
-# bot.py
 import discord
 from discord.ext import commands
 import asyncio
@@ -28,13 +27,16 @@ class TuxBot(commands.Bot):
                 await asyncio.sleep(60)
 
     async def load_cogs(self):
-        cogs = ["cogs.moderation", "cogs.fun", "cogs.linux", "cogs.general"]
+        cogs = [
+            "cogs.moderation",
+            "cogs.fun",
+            "cogs.linux",
+            "cogs.general",
+            "cogs.cards",
+            "cogs.ticket"  # Add ticket cog here
+        ]
         for cog in cogs:
             await self.load_extension(cog)
-
-    async def setup(bot):
-        await bot.add_cog(Linux(bot))
-        print('Linux cog loaded.')
 
 
 bot = TuxBot()
