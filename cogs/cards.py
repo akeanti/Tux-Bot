@@ -12,40 +12,54 @@ class Cards(commands.Cog):
         self.bot = bot
         self.cards = {
             "Arch": {
-                "desc": "🟦 Arch Linux",
-                "img": "https://example.com/arch.png"
+                "desc":
+                "<:arch:1278044002943504507> Arch Linux",
+                "img":
+                "https://c4.wallpaperflare.com/wallpaper/708/141/138/anime-anime-girls-technology-software-arch-linux-hd-wallpaper-preview.jpg"
             },
             "Ubuntu": {
-                "desc": "🟧 Ubuntu",
-                "img": "https://example.com/ubuntu.png"
+                "desc":
+                "<:ubuntu:1278050305359085629> Ubuntu",
+                "img":
+                "https://c4.wallpaperflare.com/wallpaper/905/587/596/technology-ubuntu-anime-wallpaper-preview.jpg"
             },
             "Fedora": {
-                "desc": "🟦 Fedora",
-                "img": "https://example.com/fedora.png"
+                "desc":
+                "<:fedora:1278050235909668955> Fedora",
+                "img":
+                "https://preview.redd.it/fedora-like-anime-girl-v0-yfabh380keha1.png?width=2560&format=png&auto=webp&s=cc3db47840395dfca9afc6aa60899c035a4d3d96"
             },
             "Debian": {
-                "desc": "🟥 Debian",
-                "img": "https://example.com/debian.png"
+                "desc": "<:debian:1278050607495778387> Debian",
+                "img": "https://wallpapercave.com/wp/wp6080117.jpg"
             },
             "Mint": {
-                "desc": "🟩 Linux Mint",
-                "img": "https://example.com/mint.png"
+                "desc":
+                "<:mint:1278052689372254218> Linux Mint",
+                "img":
+                "https://i.flexichat.net/var/albums/linux-tan/linux_mint_tan_by_ditret-d3ips3e.png?m=1397664685"
             },
             "Gentoo": {
-                "desc": "🟪 Gentoo",
-                "img": "https://example.com/gentoo.png"
+                "desc":
+                "<:Gentoo:1278052921962922084> Gentoo",
+                "img":
+                "https://media.discordapp.net/attachments/1213837998366396508/1278048155686015088/maxresdefault1.png?ex=66cf6299&is=66ce1119&hm=cdc44a4d546e2fdc4428dcd90c41279f187de98f4412da8646bb77e6b181f673&=&format=webp&quality=lossless&width=687&height=373"
             },
             "Kali": {
-                "desc": "🟥 Kali Linux",
-                "img": "https://example.com/kali.png"
+                "desc": "<:kali:1278053771569795143> Kali Linux",
+                "img": "https://wallpapercave.com/wp/wp6079876.jpg"
             },
             "CentOS": {
-                "desc": "🟦 CentOS",
-                "img": "https://example.com/centos.png"
+                "desc":
+                "<:centos:1278054243349037117> CentOS",
+                "img":
+                "https://media.discordapp.net/attachments/1213837998366396508/1278049216450531422/ieB8CALTaDc-HD.jpg?ex=66cf6396&is=66ce1216&hm=f2e4bea416f426281cc6fb8aab51558d21ad7723c6ba96a064eff99411a759e7&=&format=webp&width=931&height=523"
             },
             "Slackware": {
-                "desc": "🟦 Slackware",
-                "img": "https://example.com/slackware.png"
+                "desc":
+                "<:slackware:1278054165129724058> Slackware",
+                "img":
+                "https://krita-artists.org/uploads/default/original/3X/9/e/9e0d94348b94095a7bba6f8ce7438ac043168a4e.jpeg"
             }
         }
         self.user_cards = {}
@@ -110,9 +124,16 @@ class Cards(commands.Cog):
             xp = self.user_xp[user_id]
             level = xp // 100  # Assuming 100 XP per level
 
-            await message.channel.send(
-                f"{message.author.mention}, you have received a new card: **{card_info['desc']}**! {card_info['img']}"
-            )
+            # Create an embed for the card message
+            embed = discord.Embed(
+                title="New Card Received!",
+                description=
+                f"{message.author.mention}, you have received a new card: **{card_info['desc']}**!",
+                color=discord.Color.blue())
+            embed.set_image(url=card_info["img"])
+            embed.set_footer(text=f"XP: {xp} | Level: {level}")
+
+            await message.channel.send(embed=embed)
 
     @app_commands.command(name="user-profile",
                           description="View your profile with collected cards")
@@ -175,9 +196,14 @@ class Cards(commands.Cog):
         self.user_cards[user_id].remove(card_name)
         self.user_cards[member_id].append(card_name)
 
-        await interaction.response.send_message(
-            f"{interaction.user.mention} has exchanged **{self.cards[card_name]['desc']}** with {member.mention}!"
-        )
+        embed = discord.Embed(
+            title="Card Exchanged!",
+            description=
+            f"{interaction.user.mention} has exchanged **{self.cards[card_name]['desc']}** with {member.mention}!",
+            color=discord.Color.gold())
+        embed.set_image(url=self.cards[card_name]['img'])
+
+        await interaction.response.send_message(embed=embed)
 
     @app_commands.command(name="gift",
                           description="Gift a card to another user")
@@ -202,9 +228,14 @@ class Cards(commands.Cog):
         self.user_cards[user_id].remove(card_name)
         self.user_cards[member_id].append(card_name)
 
-        await interaction.response.send_message(
-            f"{interaction.user.mention} has gifted **{self.cards[card_name]['desc']}** to {member.mention}!"
-        )
+        embed = discord.Embed(
+            title="Card Gifted!",
+            description=
+            f"{interaction.user.mention} has gifted **{self.cards[card_name]['desc']}** to {member.mention}!",
+            color=discord.Color.purple())
+        embed.set_image(url=self.cards[card_name]['img'])
+
+        await interaction.response.send_message(embed=embed)
 
     @app_commands.command(name="steal",
                           description="Steal a card from another user")
@@ -224,44 +255,16 @@ class Cards(commands.Cog):
 
         if user_id not in self.user_cards:
             self.user_cards[user_id] = []
-
         self.user_cards[user_id].append(stolen_card)
 
-        await interaction.response.send_message(
-            f"{interaction.user.mention} has stolen **{self.cards[stolen_card]['desc']}** from {member.mention}!"
-        )
+        embed = discord.Embed(
+            title="Card Stolen!",
+            description=
+            f"{interaction.user.mention} has stolen the **{self.cards[stolen_card]['desc']}** card from {member.mention}!",
+            color=discord.Color.red())
+        embed.set_image(url=self.cards[stolen_card]['img'])
 
-    @app_commands.command(name="card-help",
-                          description="List all card commands")
-    async def card_help(self, interaction: discord.Interaction):
-        help_text = (
-            "/cards - View your card collection\n"
-            "/user-profile - View your profile with collected cards\n"
-            "/exchange [member] [card_name] - Exchange a card with another user\n"
-            "/gift [member] [card_name] - Gift a card to another user\n"
-            "/steal [member] - Steal a card from another user\n"
-            "/card-help - Show this help message")
-        embed = discord.Embed(title="Card Commands Help",
-                              description=help_text,
-                              color=discord.Color.blue())
         await interaction.response.send_message(embed=embed)
-
-    @app_commands.command(name="level", description="View your level and XP")
-    async def level(self, interaction: discord.Interaction):
-        user_id = str(interaction.user.id)
-        xp = self.user_xp.get(user_id, 0)
-        level = xp // 100  # Assuming 100 XP per level
-
-        # Generate level image
-        level_image = self._generate_level_image(interaction.user.name, xp,
-                                                 level)
-
-        # Send level image
-        file = discord.File(level_image, filename="level.png")
-        embed = discord.Embed(title=f"{interaction.user.name}'s Level",
-                              color=discord.Color.blue())
-        embed.set_image(url="attachment://level.png")
-        await interaction.response.send_message(embed=embed, file=file)
 
 
 async def setup(bot):
