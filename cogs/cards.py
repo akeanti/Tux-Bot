@@ -65,6 +65,7 @@ class Cards(commands.Cog):
         self.user_cards = {}
         self.user_xp = {}
         self.rare_card_prob = 0.02  # 2% chance to receive a rare card
+        self.card_settings = {}  # Stores user-specific channel settings
 
     def _get_random_card(self):
         card_name, card_info = random.choice(list(self.cards.items()))
@@ -107,6 +108,10 @@ class Cards(commands.Cog):
         if message.author.bot:
             return
 
+        # Check if the channel is enabled for card sending
+        if not self.card_settings.get(str(message.channel.id), True):
+            return
+
         if random.random() < 0.1:  # 10% chance to gain a card on each message
             card_name, card_info = self._get_random_card()
             user_id = str(message.author.id)
@@ -128,7 +133,7 @@ class Cards(commands.Cog):
             embed = discord.Embed(
                 title="New Card Received!",
                 description=
-                f"{message.author.mention}, you have received a new card: **{card_info['desc']}**!",
+                f"{message.author.mention}, you have received a new card: **{card_info['desc']}**!\n\nIf you feel disturbed by the cards, you can use the `/toggle-cards` command to remove them from this channel.",
                 color=discord.Color.blue())
             embed.set_image(url=card_info["img"])
             embed.set_footer(text=f"XP: {xp} | Level: {level}")
@@ -193,78 +198,23 @@ class Cards(commands.Cog):
         if member_id not in self.user_cards:
             self.user_cards[member_id] = []
 
-        self.user_cards[user_id].remove(card_name)
         self.user_cards[member_id].append(card_name)
-
-        embed = discord.Embed(
-            title="Card Exchanged!",
-            description=
-            f"{interaction.user.mention} has exchanged **{self.cards[card_name]['desc']}** with {member.mention}!",
-            color=discord.Color.gold())
-        embed.set_image(url=self.cards[card_name]['img'])
-
-        await interaction.response.send_message(embed=embed)
-
-    @app_commands.command(name="gift",
-                          description="Gift a card to another user")
-    @app_commands.describe(member="The member you want to gift a card to",
-                           card_name="The card you want to gift")
-    async def gift(self, interaction: discord.Interaction,
-                   member: discord.Member, card_name: str):
-        user_id = str(interaction.user.id)
-        member_id = str(member.id)
-        card_name = card_name.capitalize()
-
-        if user_id not in self.user_cards or card_name not in self.user_cards[
-                user_id]:
-            await interaction.response.send_message(
-                f"{interaction.user.mention}, you don't have the **{self.cards.get(card_name, {'desc': card_name})['desc']}** card to gift!"
-            )
-            return
-
-        if member_id not in self.user_cards:
-            self.user_cards[member_id] = []
-
         self.user_cards[user_id].remove(card_name)
-        self.user_cards[member_id].append(card_name)
 
-        embed = discord.Embed(
-            title="Card Gifted!",
-            description=
-            f"{interaction.user.mention} has gifted **{self.cards[card_name]['desc']}** to {member.mention}!",
-            color=discord.Color.purple())
-        embed.set_image(url=self.cards[card_name]['img'])
+        await interaction.response.send_message(
+            f"{interaction.user.mention}, you have successfully exchanged your **{self.cards.get(card_name, {'desc': card_name})['desc']}** card with {member.mention}!"
+        )
 
-        await interaction.response.send_message(embed=embed)
-
-    @app_commands.command(name="steal",
-                          description="Steal a card from another user")
-    @app_commands.describe(member="The member you want to steal a card from")
-    async def steal(self, interaction: discord.Interaction,
-                    member: discord.Member):
-        user_id = str(interaction.user.id)
-        member_id = str(member.id)
-
-        if member_id not in self.user_cards or not self.user_cards[member_id]:
-            await interaction.response.send_message(
-                f"{member.mention} doesn't have any cards to steal!")
-            return
-
-        stolen_card = random.choice(self.user_cards[member_id])
-        self.user_cards[member_id].remove(stolen_card)
-
-        if user_id not in self.user_cards:
-            self.user_cards[user_id] = []
-        self.user_cards[user_id].append(stolen_card)
-
-        embed = discord.Embed(
-            title="Card Stolen!",
-            description=
-            f"{interaction.user.mention} has stolen the **{self.cards[stolen_card]['desc']}** card from {member.mention}!",
-            color=discord.Color.red())
-        embed.set_image(url=self.cards[stolen_card]['img'])
-
-        await interaction.response.send_message(embed=embed)
+    @app_commands.command(
+        name="toggle-cards",
+        description="Enable or disable random card sending in this channel")
+    async def toggle_cards(self, interaction: discord.Interaction):
+        channel_id = str(interaction.channel.id)
+        current_state = self.card_settings.get(channel_id, True)
+        self.card_settings[channel_id] = not current_state
+        state = "enabled" if not current_state else "disabled"
+        await interaction.response.send_message(
+            f"Random card sending has been {state} in this channel.")
 
 
 async def setup(bot):
