@@ -191,8 +191,7 @@ class LinuxGames(commands.Cog):
 
         return '\n'.join(' '.join(row) for row in grid)
 
-    @app_commands.command(name='connect-four',
-                          description="Play Connect Four against the bot")
+    @app_commands.command(name='connect-four', description="Play Connect Four against the bot")
     async def connect_four(self, interaction: discord.Interaction):
         """Play Connect Four against the bot"""
         board = [['⚪' for _ in range(7)] for _ in range(6)]
@@ -253,148 +252,122 @@ class LinuxGames(commands.Cog):
             return all(board[0][col] != '⚪' for col in range(7))
 
         await interaction.response.send_message(
-            f"🟡 Connect Four! {interaction.user.mention} goes first.")
+            f"🟡 Connect Four! {interaction.user.name}, you're playing as 🔴. Here's the board:\n\n{print_board()}"
+        )
+
         while not winner and not is_full():
-            await interaction.followup.send(print_board())
-            await interaction.followup.send("Choose a column (0-6):")
+            await interaction.followup.send(
+                f"{interaction.user.name}, choose a column (0-6) to drop your piece."
+            )
+
             msg = await self.wait_for_message(interaction)
             if msg:
                 try:
                     col = int(msg.content)
-                    if col < 0 or col >= 7 or board[0][col] != '⚪':
+                    if col < 0 or col > 6:
                         await interaction.followup.send(
-                            "❌ Invalid column. Please choose another.")
+                            '🚫 Invalid column! Please choose a column between 0 and 6.'
+                        )
+                        continue
+                    if board[0][col] != '⚪':
+                        await interaction.followup.send(
+                            '🚫 Column is full! Choose another column.')
                         continue
 
                     drop_piece(col, player)
-                    if check_winner() == player:
-                        winner = player
+                    winner = check_winner()
+                    if winner:
                         break
 
-                    if is_full():
-                        break
-
-                    # Bot's turn
+                    # Bot move
                     bot_col = random.choice(
-                        [c for c in range(7) if board[0][c] == '⚪'])
+                        [i for i in range(7) if board[0][i] == '⚪'])
                     drop_piece(bot_col, bot)
-                    if check_winner() == bot:
-                        winner = bot
-                        break
+                    winner = check_winner()
+
+                    await interaction.followup.send(f"🟡 Bot dropped a piece in column {bot_col}.")
+                    await interaction.followup.send(f"Current board:\n\n{print_board()}")
 
                 except ValueError:
                     await interaction.followup.send(
-                        '🚫 Please enter a valid number.')
+                        '🚫 Please enter a valid column number.')
 
-        await interaction.followup.send(print_board())
         if winner:
-            await interaction.followup.send(
-                f'🎉 {interaction.user.mention} wins!' if winner ==
-                player else '🤖 Bot wins!')
-        else:
-            await interaction.followup.send('🔄 It\'s a tie!')
-
-    @app_commands.command(
-        name='math-quiz',
-        description="Test your math skills with a quick quiz")
-    async def math_quiz(self, interaction: discord.Interaction):
-        """Test your math skills with a quick quiz"""
-        operations = {
-            "addition": lambda x, y: x + y,
-            "subtraction": lambda x, y: x - y,
-            "multiplication": lambda x, y: x * y,
-            "division": lambda x, y: x / y
-        }
-        op = random.choice(list(operations.keys()))
-        num1, num2 = random.randint(1, 10), random.randint(1, 10)
-        correct_answer = operations[op](num1, num2)
-
-        await interaction.response.send_message(
-            f"🔢 What is {num1} {op} {num2}?")
-
-        msg = await self.wait_for_message(interaction)
-        if msg:
-            try:
-                user_answer = float(msg.content)
-                if user_answer == correct_answer:
-                    await interaction.followup.send('✅ Correct!')
-                else:
-                    await interaction.followup.send(
-                        f'❌ Wrong answer. The correct answer was {correct_answer}'
-                    )
-            except ValueError:
+            if winner == player:
                 await interaction.followup.send(
-                    '🚫 Please enter a valid number.')
+                    f"🎉 Congratulations {interaction.user.name}! You won!")
+            else:
+                await interaction.followup.send("💥 The bot won! Better luck next time!")
+        else:
+            await interaction.followup.send("It's a tie!")
 
-    @app_commands.command(name='tictactoe',
-                          description="Play Tic-Tac-Toe with the bot")
-    async def tictactoe(self, interaction: discord.Interaction):
-        """Play Tic-Tac-Toe with the bot"""
-        board = [' ' for _ in range(9)]
-        player, bot = 'X', 'O'
-        winner = None
+
+    @app_commands.command(name='tic-tac-toe', description="Play a game of Tic-Tac-Toe")
+    async def tic_tac_toe(self, interaction: discord.Interaction):
+        """Play a game of Tic-Tac-Toe"""
+
+        board = ['⬛'] * 9
+        player = '❌'
+        bot = '⭕'
 
         def print_board():
-            return f"""
-            {board[0]} | {board[1]} | {board[2]}
-            ---------
-            {board[3]} | {board[4]} | {board[5]}
-            ---------
-            {board[6]} | {board[7]} | {board[8]}
-            """
+            return f"{board[0]} | {board[1]} | {board[2]}\n" \
+                   f"{board[3]} | {board[4]} | {board[5]}\n" \
+                   f"{board[6]} | {board[7]} | {board[8]}"
 
-        def check_winner():
-            lines = [(0, 1, 2), (3, 4, 5), (6, 7, 8), (0, 3, 6), (1, 4, 7),
-                     (2, 5, 8), (0, 4, 8), (2, 4, 6)]
-            for a, b, c in lines:
-                if board[a] == board[b] == board[c] and board[a] != ' ':
-                    return board[a]
+        def check_winner(b):
+            win_conditions = [
+                [0, 1, 2], [3, 4, 5], [6, 7, 8],  # Rows
+                [0, 3, 6], [1, 4, 7], [2, 5, 8],  # Columns
+                [0, 4, 8], [2, 4, 6]  # Diagonals
+            ]
+            for condition in win_conditions:
+                if b[condition[0]] == b[condition[1]] == b[condition[2]] != '⬛':
+                    return b[condition[0]]
             return None
 
-        def is_full():
-            return all(cell != ' ' for cell in board)
-
-        await interaction.response.send_message(
-            f"✖️ Tic-Tac-Toe! {interaction.user.mention} goes first.")
-        while not winner and not is_full():
-            await interaction.followup.send(print_board())
-            await interaction.followup.send("Choose a position (1-9):")
-            msg = await self.wait_for_message(interaction)
+        async def player_move():
+            embed = discord.Embed(title="Tic-Tac-Toe", description=f"{interaction.user.name}, choose a position (0-8):\n{print_board()}", color=discord.Color.blue())
+            await interaction.followup.send(embed=embed)
+            msg = await self.bot.wait_for('message', check=lambda m: m.author == interaction.user and m.channel == interaction.channel)
             if msg:
                 try:
-                    pos = int(msg.content) - 1
-                    if pos < 0 or pos >= 9 or board[pos] != ' ':
-                        await interaction.followup.send(
-                            "❌ Invalid position. Please choose another.")
-                        continue
-
+                    pos = int(msg.content)
+                    if board[pos] != '⬛':
+                        await interaction.followup.send("🚫 Position already taken! Try again.")
+                        return await player_move()
                     board[pos] = player
-                    if check_winner() == player:
-                        winner = player
-                        break
+                except (ValueError, IndexError):
+                    await interaction.followup.send("🚫 Invalid position! Choose a number between 0-8.")
+                    return await player_move()
 
-                    if is_full():
-                        break
+        def bot_move():
+            available_moves = [i for i in range(9) if board[i] == '⬛']
+            bot_choice = random.choice(available_moves)
+            board[bot_choice] = bot
 
-                    # Bot's turn
-                    bot_pos = random.choice(
-                        [i for i in range(9) if board[i] == ' '])
-                    board[bot_pos] = bot
-                    if check_winner() == bot:
-                        winner = bot
-                        break
+        winner = None
 
-                except ValueError:
-                    await interaction.followup.send(
-                        '🚫 Please enter a valid number.')
+        await interaction.response.send_message(embed=discord.Embed(title="Tic-Tac-Toe", description="🎮 Let's play Tic-Tac-Toe!", color=discord.Color.green()))
 
-        await interaction.followup.send(print_board())
+        while not winner and '⬛' in board:
+            await player_move()
+            winner = check_winner(board)
+            if winner or '⬛' not in board:
+                break
+
+            bot_move()
+            winner = check_winner(board)
+
+        embed = discord.Embed(title="Tic-Tac-Toe Result", description=print_board(), color=discord.Color.red())
         if winner:
-            await interaction.followup.send(
-                f'🎉 {interaction.user.mention} wins!' if winner ==
-                player else '🤖 Bot wins!')
+            if winner == player:
+                embed.add_field(name="Result", value=f"🎉 {interaction.user.name} wins!")
+            else:
+                embed.add_field(name="Result", value="💥 Bot wins!")
         else:
-            await interaction.followup.send('🔄 It\'s a tie!')
+            embed.add_field(name="Result", value="It's a tie!")
+        await interaction.followup.send(embed=embed)
 
     @app_commands.command(name='snake',
                           description="Play a text-based Snake game")
