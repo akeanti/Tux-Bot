@@ -33,8 +33,9 @@ class TuxBot(commands.Bot):
             "cogs.linux",
             "cogs.general",
             "cogs.cards",
-            "cogs.ticket",  # Ticket cog
-            "cogs.utility",  # Utility cog
+            "cogs.ticket",
+            "cogs.utility",
+            "cogs.games",  # Load the new games cog
         ]
         for cog in cogs:
             await self.load_extension(cog)
@@ -42,9 +43,8 @@ class TuxBot(commands.Bot):
     async def on_guild_join(self, guild):
         owner = guild.owner
         if owner:
-            # Create a more visually appealing embed
             embed = discord.Embed(
-                title="🎉 Thanks for Using Tux!",
+                title="🎉 Thanks for Adding Us!",
                 description=
                 f"Thank you for adding Tux Bot to your server, **{guild.name}**! We're thrilled to be here.",
                 color=discord.Color.orange())
@@ -54,14 +54,12 @@ class TuxBot(commands.Bot):
             )
             embed.set_footer(text="Tux Bot | Powered by Akeanti")
 
-            # Create a button
             button = discord.ui.Button(
                 label="Visit Documentation",
                 url="https://tux-discord-bot.github.io/Documentation/")
             view = discord.ui.View()
             view.add_item(button)
 
-            # Send a DM to the guild owner
             try:
                 await owner.send(embed=embed, view=view)
             except discord.Forbidden:
