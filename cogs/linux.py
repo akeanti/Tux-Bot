@@ -158,6 +158,13 @@ class Linux(commands.Cog):
         """
         await interaction.response.send_message(ls_output)
 
+    @app_commands.command(name="sl")
+    async def sl(self, interaction: discord.Interaction):
+        """Simulate the sl command."""
+        embed = discord.Embed(title=f"user@tux-bot:~ $ sl", color=discord.Color.blue())
+        embed.set_image(url="https://cdn.discordapp.com/attachments/1049614691091091507/1311117374291841084/sl.gif")
+        await interaction.response.send_message(embed=embed)
+
     @app_commands.command(name="whoami")
     async def whoami(self, interaction: discord.Interaction):
         """Simulate the whoami command."""
