@@ -8,22 +8,23 @@
 
 ### Core Commands
 
-| Command                  | Description                                        |
-|--------------------------|----------------------------------------------------|
-| `/neofetch`              | Simulates the `neofetch` command, displaying system information. |
-| `/uptime`                | Shows the bot's uptime.                           |
-| `/fortune`               | Simulates the `fortune` command, providing random fortunes. |
-| `/cowthink <message>`    | Simulates the `cowthink` command, displaying a message inside a cow thinking bubble. |
-| `/df`                    | Simulates the `df` (disk free) command, showing disk space usage. |
-| `/top`                   | Simulates the `top` command, displaying running processes. |
-| `/man <command>`         | Provides a manual page for the specified command. |
-| `/ls`                    | Simulates the `ls` command, listing directory contents. |
-| `/whoami`                | Simulates the `whoami` command, showing the current user. |
-| `/chmod <permissions> <file>` | Simulates the `chmod` command, changing file permissions. |
-| `/grep <pattern> <file>` | Simulates the `grep` command, searching for a pattern in a file. |
-| `/ping`                  | Simulates the `ping` command, checking network connectivity. |
-| `/ps`                    | Simulates the `ps` command, displaying running processes. |
-| `/kill <pid>`            | Simulates the `kill` command, terminating a process by its PID. |
+| Command                       | Description                                                                          |
+|-------------------------------|--------------------------------------------------------------------------------------|
+| `/neofetch`                   | Simulates the `neofetch` command, displaying system information.                     |
+| `/uptime`                     | Shows the bot's uptime.                                                              |
+| `/fortune`                    | Simulates the `fortune` command, providing random fortunes.                          |
+| `/cowthink <message>`         | Simulates the `cowthink` command, displaying a message inside a cow thinking bubble. |
+| `/df`                         | Simulates the `df` (disk free) command, showing disk space usage.                    |
+| `/top`                        | Simulates the `top` command, displaying running processes.                           |
+| `/man <command>`              | Provides a manual page for the specified command.                                    |
+| `/ls`                         | Simulates the `ls` command, listing directory contents.                              |
+| `/sl`                         | Simulates the `sl` command, driving the train                                        |
+| `/whoami`                     | Simulates the `whoami` command, showing the current user.                            |
+| `/chmod <permissions> <file>` | Simulates the `chmod` command, changing file permissions.                            |
+| `/grep <pattern> <file>`      | Simulates the `grep` command, searching for a pattern in a file.                     |
+| `/ping`                       | Simulates the `ping` command, checking network connectivity.                         |
+| `/ps`                         | Simulates the `ps` command, displaying running processes.                            |
+| `/kill <pid>`                 | Simulates the `kill` command, terminating a process by its PID.                      |
 
 ### Fun Commands
 
