@@ -1,8 +1,8 @@
 import discord
 from discord.ext import commands
 from discord import app_commands
+from typing import List
 import random
-import datetime
 import aiohttp
 
 
@@ -61,13 +61,13 @@ class Utility(commands.Cog):
         await interaction.response.send_message(embed=embed)
 
     @app_commands.command(name="choose")
-    async def choose(self, interaction: discord.Interaction, *choices: str):
+    async def choose(self, interaction: discord.Interaction, choices: str):
         """Randomly choose between given choices."""
         if not choices:
             await interaction.response.send_message(
                 "You need to provide at least one choice.")
             return
-        choice = random.choice(choices)
+        choice = random.choice(choices.split())
         await interaction.response.send_message(f"I choose: {choice}")
 
     @app_commands.command(name="weather")
