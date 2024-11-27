@@ -18,7 +18,7 @@ class TuxBot(commands.Bot):
         await self.tree.sync()  # Force sync commands globally on bot startup
         print(f'{self.user} has connected to Discord!')
         print('Commands synced.')
-        asyncio.create_task(self.cycle_status())
+        await asyncio.create_task(self.cycle_status())
 
     async def cycle_status(self):
         while True:

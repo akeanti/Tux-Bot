@@ -1,0 +1,9 @@
+# Add files/folderes here, which should not be pushed to git
+# JetBrains IDEs
+.idea
+
+# VS Code IDE
+.vscode
+
+# Python cache folder
+__pycache__
